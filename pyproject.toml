@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "lenu"
+version = "0.1.0"
+description = "Legal Entity Name Understanding"
+authors = [
+    "aarimond <alexander.arimond@sociovestix.com>"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+pandas = "^1.4.2"
+scikit-learn = "^1.0.2"
+typer = {extras = ["all"], version = "^0.4.1"}
+requests = "^2.27.1"
+pydantic = "^1.9.0"
+types-requests = "^2.27.16"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.942"
+pytest = "^7.1.1"
+black = "^22.3.0"
+flake8 = "^4.0.1"
+
+[tool.poetry.scripts]
+lenu = 'lenu.console:app'
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[flake8]
+# Recommend matching the black line length (default 88),
+# rather than using the flake8 default of 79:
+max-line-length = 88
