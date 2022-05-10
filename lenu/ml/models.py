@@ -1,10 +1,8 @@
-import numpy
 import pandas  # type: ignore
 from lenu.data.elf_codes import ELFAbbreviations
 from sklearn.base import (  # type: ignore
     BaseEstimator,
     ClassifierMixin,
-    TransformerMixin,
 )
 from sklearn.utils.validation import check_is_fitted  # type: ignore
 

@@ -1,5 +1,5 @@
 import pandas  # type: ignore
-from lenu.data.lei import COL_ELF, COL_JURISDICTION
+from lenu.data.lei import COL_ELF
 from sklearn.model_selection import (  # type: ignore
     cross_validate,
     StratifiedShuffleSplit,
