@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 
 import numpy
 import pandas  # type: ignore
@@ -72,7 +72,7 @@ class ELFAbbreviations:
         return self._elf_by_jur_and_abbr.get((jurisdiction, abbreviation), [])
 
     @staticmethod
-    @cache
+    @lru_cache(maxsize=None)
     def matches(legal_name, abbr, use_lowercasing=True, use_endswith=True):
         if use_lowercasing:
             abbr = abbr.lower()

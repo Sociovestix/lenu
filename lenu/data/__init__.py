@@ -19,7 +19,13 @@ from lenu.data.goldencopyfiles import (
 )
 
 from logging import getLogger
-from importlib.resources import files
+
+try:
+    from importlib import resources
+except ImportError:
+    # backport for python < 3.9
+    import importlib_resources as resources
+
 
 logger = getLogger(__name__)
 
@@ -87,9 +93,9 @@ class DataRepo:
         urllib.request.urlretrieve(lei_data_url, self.data_dir.joinpath(filename))
 
         logger.info(f"Provide ELF Code list to {self.data_dir}")
-        elf_resource = Path(str(files(data).joinpath(ELF_CODE_FILE_NAME)))
         elf_target = self.data_dir.joinpath(ELF_CODE_FILE_NAME)
-        shutil.copy(elf_resource, elf_target)
+        with resources.path(data, ELF_CODE_FILE_NAME) as elf_resource:
+            shutil.copy(elf_resource, elf_target)
 
     @staticmethod
     def from_data_dir(data_dir: Path) -> "DataRepo":
