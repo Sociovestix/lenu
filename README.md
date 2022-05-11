@@ -49,6 +49,11 @@ It provides:
 
 ## Installation
 
+via PyPI:
+```shell
+pip install lenu
+```
+
 From github:
 ```shell
 pip install https://github.com/Sociovestix/lenu
