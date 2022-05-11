@@ -19,7 +19,7 @@ lenu - Legal Entity Name Understanding
 
 ---------------
 
-[![License](https://img.shields.io/github/license/Sociovestix/lenu)](https://github.com/Sociovestix/lenu/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/Sociovestix/lenu.svg)](https://github.com/Sociovestix/lenu/blob/main/LICENSE)
 ![](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
