@@ -2,6 +2,7 @@
 name = "lenu"
 version = "0.1.0"
 description = "Legal Entity Name Understanding"
+readme = "README.md"
 authors = [
     "aarimond <alexander.arimond@sociovestix.com>"
 ]

@@ -13,7 +13,7 @@ lenu - Legal Entity Name Understanding
 <h3 align="center">in collaboration with</h3> 
 <h1 align="center">
 <a href="https://sociovestix.com">
-<img src="https://sociovestix.com/img/svl_logo.png" width="300">
+<img src="https://sociovestix.com/img/svl_logo_centered.svg" width="700px">
 </a>
 </h1><br>
 
