@@ -24,7 +24,7 @@ lenu - Legal Entity Name Understanding
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
-**lenu** is python library that helps to understand and work with Legal Entity Names
+**lenu** is a python library that helps to understand and work with Legal Entity Names
 in the context of the [Legal Entity Identifier](https://www.gleif.org/en/about-lei/introducing-the-legal-entity-identifier-lei) (LEI) Standard (ISO 17441)
 as well as the [Entity Legal Form (ELF) Code List](https://www.gleif.org/en/about-lei/code-lists/iso-20275-entity-legal-forms-code-list) Standard (ISO 20275).  
 
