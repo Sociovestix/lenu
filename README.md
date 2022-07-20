@@ -5,22 +5,21 @@ lenu - Legal Entity Name Understanding
 
 ---------------
 
-<div style="text-align:center; margin-top: 50px">
+<h1 align="center">
 <a href="https://gleif.org">
 <!-- Logo for github (dark background) -->
-    <img src="https://sdglabs.ai/wp-content/uploads/2022/07/GLEIF-Logo-Colour-Reversed.png" width="220">
+<img src="http://sdglabs.ai/wp-content/uploads/2022/07/GLIEF-Logo-Colour-Reversed.png" width="220">
 <!-- Logo for pypi (white background) - uncomment when publishing to pypi
-    <img src="https://sdglabs.ai/wp-content/uploads/2022/07/gleif-logo-new.png" width="220">
+<img src="http://sdglabs.ai/wp-content/uploads/2022/07/gleif-logo-new.png" width="220">
 -->
 </a>
-<br>
-<div style="font-size: 25px; margin-bottom: 40px; margin-top: 20px">
-    in collaboration with
-</div> 
+</h1><br>
+<h3 align="center">in collaboration with</h3> 
+<h1 align="center">
 <a href="https://sociovestix.com">
-    <img src="https://sociovestix.com/img/svl_logo_centered.svg" width="700px">
+<img src="https://sociovestix.com/img/svl_logo_centered.svg" width="700px">
 </a>
-</div>
+</h1><br>
 
 ---------------
 
