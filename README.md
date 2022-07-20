@@ -8,9 +8,9 @@ lenu - Legal Entity Name Understanding
 <h1 align="center">
 <a href="https://gleif.org">
 <!-- Logo for github (dark background) - comment when publishing to pypi -->
-<img src="http://sdglabs.ai/wp-content/uploads/2022/07/GLIEF-Logo-Colour-Reversed.png#gh-dark-mode-only" width="220">
-<!-- Logo for pypi (white background) - uncomment when publishing to pypi -->
-<img src="http://sdglabs.ai/wp-content/uploads/2022/07/gleif-logo-new.png#gh-light-mode-only" width="220">
+<img src="http://sdglabs.ai/wp-content/uploads/2022/07/GLIEF-Logo-Colour-Reversed.png#gh-dark-mode-only" width="220" alt="">
+<!-- Logo for pypi (white background) -->
+<img src="http://sdglabs.ai/wp-content/uploads/2022/07/gleif-logo-new.png#gh-light-mode-only" width="220" alt="">
 </a>
 </h1><br>
 <h3 align="center">in collaboration with</h3> 
