@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 import joblib  # type: ignore
+import numpy
 import pandas  # type: ignore
 from sklearn.compose import ColumnTransformer  # type: ignore
 from sklearn.feature_extraction.text import CountVectorizer  # type: ignore
@@ -27,12 +28,12 @@ def DefaultPipeline(elf_abbreviations: ELFAbbreviations, jurisdiction: str):
                     elf_abbreviations=elf_abbreviations,
                     jurisdiction=jurisdiction,
                 ),
-                [COL_LEGALNAME, COL_ELF],
+                0  # column nr
             ),
             (
                 "tokenizer",
                 CountVectorizer(tokenizer=tokenize, lowercase=False, binary=True),
-                COL_LEGALNAME,
+                0  # column nr
             ),
         ]
     )
@@ -63,8 +64,8 @@ def filter_infrequent_elf_codes(jurisdiction_data):
 def train_for_jurisdiction(jurisdiction_data, pipeline, test_size=1.0 / 3):
     filtered = filter_infrequent_elf_codes(jurisdiction_data)
 
-    X = filtered[[COL_LEGALNAME, COL_ELF, "Jurisdiction"]]
-    y = filtered[COL_ELF]
+    X = filtered[[COL_LEGALNAME]].values
+    y = filtered[COL_ELF].values
 
     # The minimum number of groups for any class cannot be less than 2.
     X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y)
@@ -88,13 +89,7 @@ class ELFDetectionModel:
 
     def detect(self, legal_name, top=3):
         # preparing the input so that it fits
-        input = pandas.DataFrame(
-            {
-                COL_LEGALNAME: [legal_name],
-                COL_ELF: [""],
-                "Jurisdiction": [self.jurisdiction],
-            }
-        )
+        input = numpy.array([[legal_name]])
 
         # do the prediction
         elf_probabilities = (

@@ -27,7 +27,7 @@ class ELFAbbreviationTransformer(TransformerMixin):
         )
 
         predictions = []
-        for name in X["Entity.LegalName"]:
+        for name in X:
             pred = []  # list can end up empty
             for abbr in abbreviations:
                 if self.elf_abbreviations.matches(
