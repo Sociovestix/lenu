@@ -8,25 +8,22 @@ class ELFAbbreviationTransformer(TransformerMixin):
     def __init__(
         self,
         elf_abbreviations: ELFAbbreviations,
+        jurisdiction: str,
         use_endswith=True,
         use_lowercasing=True,
     ):
         self.elf_abbreviations = elf_abbreviations
+        self.jurisdiction = jurisdiction
         self.use_endswith = use_endswith
         self.use_lowercasing = use_lowercasing
-
-    def _get_jurisdiction_from_input(self, X):
-        return X["Jurisdiction"].iloc[0]
 
     def fit(self, X, y=None):
         # does nothing, but needs to be implemented
         return self
 
     def transform(self, X, y=None):
-        jurisdiction = self._get_jurisdiction_from_input(X)
-
         abbreviations = self.elf_abbreviations.abbreviations_for_jurisdiction(
-            jurisdiction
+            self.jurisdiction
         )
 
         predictions = []
@@ -49,6 +46,7 @@ class ELFAbbreviationTransformer(TransformerMixin):
     def get_params(self, **kwargs):
         return {
             "elf_abbreviations": self.elf_abbreviations,
+            "jurisdiction": self.jurisdiction,
             "use_endswith": self.use_endswith,
             "use_lowercasing": self.use_lowercasing,
         }

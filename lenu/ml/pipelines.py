@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split  # type: ignore
 from sklearn.naive_bayes import ComplementNB  # type: ignore
 from sklearn.pipeline import Pipeline  # type: ignore
 
-from lenu.data import DataRepo
+from lenu.data import DataRepo, ELFAbbreviations
 from lenu.data.lei import COL_LEGALNAME, COL_ELF
 from lenu.ml.cnames import tokenize
 from lenu.ml.features import ELFAbbreviationTransformer
@@ -18,13 +18,16 @@ from lenu.ml.features import ELFAbbreviationTransformer
 logger = logging.getLogger(__name__)
 
 
-def DefaultPipeline(elf_abbreviations):
+def DefaultPipeline(elf_abbreviations: ELFAbbreviations, jurisdiction: str):
     feature_extractor = ColumnTransformer(
         transformers=[
             (
                 "abbreviations",
-                ELFAbbreviationTransformer(elf_abbreviations=elf_abbreviations),
-                [COL_LEGALNAME, COL_ELF, "Jurisdiction"],
+                ELFAbbreviationTransformer(
+                    elf_abbreviations=elf_abbreviations,
+                    jurisdiction=jurisdiction,
+                ),
+                [COL_LEGALNAME, COL_ELF],
             ),
             (
                 "tokenizer",
@@ -113,7 +116,7 @@ class ModelRepo:
         jurisdiction_data = data_loader.load_lei_cdf_data(jurisdiction)
         elf_abbreviations = data_loader.load_elf_abbreviations()
 
-        pipeline = DefaultPipeline(elf_abbreviations)
+        pipeline = DefaultPipeline(elf_abbreviations, jurisdiction)
 
         nsamples = len(jurisdiction_data)
         logger.info(
