@@ -79,7 +79,7 @@ class DataRepo:
 
     def load_elf_abbreviations(self) -> ELFAbbreviations:
         elf_code_list = self.load_elf_code_list()
-        elf_abbreviations = ELFAbbreviations.from_elf_code_list(elf_code_list)
+        elf_abbreviations = elf_code_list.get_abbreviations()
         return elf_abbreviations
 
     def download_latest(self) -> None:
