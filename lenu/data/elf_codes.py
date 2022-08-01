@@ -102,6 +102,11 @@ class ELFCodeList:
 
         return ELFAbbreviations(elf_abbreviations)
 
+    def get_inactive_elf_codes(self):
+        return list(self.elf_code_list[
+            self.elf_code_list['ELF Status ACTV/INAC'] == 'INAC'
+        ]['ELF Code'].unique())
+
 
 def load_elf_code_list(url) -> ELFCodeList:
     elf_code_list = pandas.read_csv(

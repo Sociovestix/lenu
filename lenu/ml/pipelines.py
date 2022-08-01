@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split  # type: ignore
 from sklearn.naive_bayes import ComplementNB  # type: ignore
 from sklearn.pipeline import Pipeline  # type: ignore
 
-from lenu.data import DataRepo, ELFAbbreviations
+from lenu.data import DataRepo, ELFAbbreviations, ELFCodeList
 from lenu.data.lei import COL_LEGALNAME, COL_ELF
 from lenu.ml.cnames import tokenize
 from lenu.ml.features import ELFAbbreviationTransformer
@@ -28,12 +28,12 @@ def DefaultPipeline(elf_abbreviations: ELFAbbreviations, jurisdiction: str):
                     elf_abbreviations=elf_abbreviations,
                     jurisdiction=jurisdiction,
                 ),
-                0  # column nr
+                0,  # column nr
             ),
             (
                 "tokenizer",
                 CountVectorizer(tokenizer=tokenize, lowercase=False, binary=True),
-                0  # column nr
+                0,  # column nr
             ),
         ]
     )
@@ -61,11 +61,16 @@ def filter_infrequent_elf_codes(jurisdiction_data):
     return filtered
 
 
-def train_for_jurisdiction(jurisdiction_data, pipeline, test_size=1.0 / 3):
-    filtered = filter_infrequent_elf_codes(jurisdiction_data)
+def filter_inactive_elf_codes(jurisdiction_data, elf_code_list: ELFCodeList):
+    return jurisdiction_data[
+        ~jurisdiction_data[COL_ELF].isin(elf_code_list.get_inactive_elf_codes())
+    ]
 
-    X = filtered[[COL_LEGALNAME]].values
-    y = filtered[COL_ELF].values
+
+def train_for_jurisdiction(jurisdiction_data, pipeline, test_size=1.0 / 3):
+
+    X = jurisdiction_data[[COL_LEGALNAME]].values
+    y = jurisdiction_data[COL_ELF].values
 
     # The minimum number of groups for any class cannot be less than 2.
     X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y)
@@ -109,9 +114,12 @@ class ModelRepo:
 
     def train_pipeline(self, jurisdiction, data_loader: DataRepo):
         jurisdiction_data = data_loader.load_lei_cdf_data(jurisdiction)
-        elf_abbreviations = data_loader.load_elf_abbreviations()
+        elf_code_list = data_loader.load_elf_code_list()
 
-        pipeline = DefaultPipeline(elf_abbreviations, jurisdiction)
+        jurisdiction_data = filter_infrequent_elf_codes(jurisdiction_data)
+        jurisdiction_data = filter_inactive_elf_codes(jurisdiction_data, elf_code_list)
+
+        pipeline = DefaultPipeline(elf_code_list.get_abbreviations(), jurisdiction)
 
         nsamples = len(jurisdiction_data)
         logger.info(

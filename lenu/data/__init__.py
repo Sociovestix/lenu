@@ -24,7 +24,7 @@ try:
     from importlib import resources
 except ImportError:
     # backport for python < 3.9
-    import importlib_resources as resources
+    import importlib_resources as resources  # type: ignore
 
 
 logger = getLogger(__name__)
