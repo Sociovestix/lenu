@@ -5,7 +5,7 @@ from typing import Optional
 import shutil
 
 from lenu import data
-from lenu.data.elf_codes import load_elf_code_list, ELFAbbreviations, ELF_CODE_FILE_NAME
+from lenu.data.elf_codes import load_elf_code_list, ELFAbbreviations, ELF_CODE_FILE_NAME, ELFCodeList
 from lenu.data.lei import (
     load_lei_cdf_data,
     COL_LEGALNAME,
@@ -70,7 +70,7 @@ class DataRepo:
         jurisdiction_data = lei_data[lei_data["Jurisdiction"] == jurisdiction]
         return jurisdiction_data
 
-    def load_elf_code_list(self):
+    def load_elf_code_list(self) -> ELFCodeList:
         if not self.ready():
             raise DataRepoNotReady()
 

@@ -82,9 +82,9 @@ def elf(
     elf_probabilities = elf_model.detect(legal_name, top=3)
 
     # map things back to ELF Code and present
-    elf_codes = data_repo.load_elf_code_list().groupby("ELF Code").first()
+    elf_codes_names = data_repo.load_elf_code_list().get_names()
     res = (
-        elf_codes.loc[elf_probabilities.index]
+        elf_codes_names.loc[elf_probabilities.index]
         .assign(Score=elf_probabilities)
         .reset_index()
         .rename(columns={"index": "ELF Code"})[

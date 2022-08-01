@@ -6,8 +6,18 @@ import pandas  # type: ignore
 ELF_CODE_FILE_NAME = "2021-10-21-elf-code-list-v1.4.1.csv"
 
 
-def load_elf_code_list(url):
-    return pandas.read_csv(
+class ELFCodeList:
+    def __init__(self, elf_code_list):
+        self.elf_code_list = elf_code_list
+
+    def get_names(self):
+        return self.elf_code_list.groupby("ELF Code").first()[
+            ["Entity Legal Form name Local name"]
+        ]
+
+
+def load_elf_code_list(url) -> ELFCodeList:
+    elf_code_list = pandas.read_csv(
         url,
         low_memory=False,
         dtype=str,
@@ -15,6 +25,7 @@ def load_elf_code_list(url):
         na_values=[""],
         keep_default_na=False,
     )
+    return ELFCodeList(elf_code_list)
 
 
 def get_jurisdiction(elf_code_list):
