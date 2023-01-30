@@ -89,6 +89,9 @@ Examples:
 lenu train DE       # Germany
 lenu train US-DE    # United States - Delaware
 lenu train IT       # Italy
+
+# enable logging to see more information like the number of samples and accuracy
+lenu --enable-logging train CH 
 ```
 
 Identify ELF Code by using a model. The tool will return the best scoring ELF Codes. 
