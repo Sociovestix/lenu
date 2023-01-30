@@ -13,8 +13,8 @@ class TyperEchoHandler(Handler):
             echo(msg, err=record.levelno >= logging.WARNING)
 
 
-def typer_log_config(verbose: bool = False, loglevel: str = "INFO"):
-    if verbose:
+def typer_log_config(quiet: bool = False, loglevel: str = "INFO"):
+    if not quiet:
         logger = logging.getLogger()
         logger.setLevel(loglevel.upper())
 
