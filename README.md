@@ -28,7 +28,7 @@ lenu - Legal Entity Name Understanding
 in the context of the [Legal Entity Identifier](https://www.gleif.org/en/about-lei/introducing-the-legal-entity-identifier-lei) (LEI) Standard (ISO 17441)
 as well as the [Entity Legal Form (ELF) Code List](https://www.gleif.org/en/about-lei/code-lists/iso-20275-entity-legal-forms-code-list) Standard (ISO 20275).  
 
-The library utilizes Machine Learning with scikit-learn and is distributed under Creative Commons Zero 1.0 Universal license.   
+The library utilizes Machine Learning with Transformers and scikit-learn. It provides and utilizes pre-trained ELF Detection models published at https://huggingface.co/Sociovestix. This code as well as the LEI data and models are distributed under Creative Commons Zero 1.0 Universal license.
 
 The project was started in November 2021 as a collaboration of the [Global Legal Entity Identifier Foundation](https://gleif.org) (GLEIF) and
 [Sociovestix Labs](https://sociovestix.com) with the goal to explore how Machine Learning can support in detecting the legal form (ELF Code) from a legal name. 
@@ -36,13 +36,15 @@ The project was started in November 2021 as a collaboration of the [Global Legal
 It provides:
 - an interface to download [LEI](https://www.gleif.org/en/lei-data/gleif-golden-copy/download-the-golden-copy#/) and [ELF Code](https://www.gleif.org/en/about-lei/code-lists/iso-20275-entity-legal-forms-code-list) data from GLEIF's public website
 - an interface to train and make use of Machine Learning models to classify ELF Codes from given Legal Names
-
+- an interface to use pre-trained ELF Detection models published on https://huggingface.co/Sociovestix
 ---
 
 ## Dependencies
 **lenu** requires
 - python (>=3.8, <3.10)
-- [scikit-learn](https://scikit-learn.org/) - Provides the Machine Learning functionality 
+- [scikit-learn](https://scikit-learn.org/) - Provides Machine Learning functionality for token based modelling
+- [transformers](https://huggingface.co/docs/transformers/index) - Download and applying Neural Network Models
+- [pytorch](https://pytorch.org/) - Machine Learning Framework to train Neural Network Models
 - [pandas](https://pandas.pydata.org/) - For reading and handling data
 - [Typer](https://typer.tiangolo.com/) - Adds the command line interface
 - [requests](https://docs.python-requests.org/en/latest/) and [pydantic](https://pydantic-docs.helpmanual.io/) - For downloading LEI data from GLEIF's website
@@ -98,6 +100,15 @@ lenu elf DE "Hans Müller KG"
 # 2     OL20  Einzelunternehmen, eingetragener Kaufmann, ein...  0.000714
 ```
 
+You can also use pre-trained models, which is recommended in most cases:
+```shell
+# Model available at https://huggingface.co/Sociovestix/lenu_DE
+lenu elf Sociovestix/lenu_DE "Hans Müller KG"  
+#  ELF Code      Entity Legal Form name Local name     Score
+#0     8Z6G                  Kommanditgesellschaft  0.999445
+#1     2HBR  Gesellschaft mit beschränkter Haftung  0.000247
+#2     FR3V       Gesellschaft bürgerlichen Rechts  0.000071
+```
 
 ## Support and Contributing
 Feel free to reach out to either [Sociovestix Labs](https://sociovestix.com/contact) or [GLEIF](https://www.gleif.org/contact/contact-information)
