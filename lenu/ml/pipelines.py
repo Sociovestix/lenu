@@ -143,6 +143,12 @@ class ModelRepo:
 
         return ELFDetectionModel(jurisdiction, pipeline)
 
+    def list(self):
+        return [
+            model_path.stem.split("_")[-1]
+            for model_path in self.models_dir.glob("*.joblib") 
+        ]
+
     @staticmethod
     def from_models_dir(models_dir: Path) -> "ModelRepo":
         if not models_dir.exists() and not models_dir.is_dir():

@@ -53,6 +53,31 @@ def train(
     else:
         logger.error("LEI data is not ready yet, Please use `lenu download`")
 
+@app.command()
+def list(
+    models_dir: Path = typer.Option(
+        DEFAULT_MODEL_DIR, exists=True, dir_okay=True, resolve_path=True
+        )
+):
+    
+    model_repo = ModelRepo.from_models_dir(models_dir)
+
+    local_models = model_repo.list()
+    if local_models:
+        echo("=== LENU models trained locally by applying scikit-learn approach: ===")
+        for m in local_models:
+            echo(m)
+        echo("")
+    
+    from lenu.remote import get_lenu_models_from_huggingface
+    remote_models = get_lenu_models_from_huggingface()
+    if remote_models:
+        echo("=== LENU models available on HuggingFace, trained by applying Transformer approach: ===")
+        for m in remote_models:
+            echo(m)
+        echo("")
+    echo("You can classify ELF Codes any of these jurisdiction based models like this:")
+    echo("lenu elf {model} \"{legal_entity_name}\"")
 
 @app.command()
 def elf(
