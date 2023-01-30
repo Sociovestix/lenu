@@ -55,7 +55,7 @@ def filter_infrequent_elf_codes(jurisdiction_data):
     if len(removed) > 0:
         removed_elfs = list(removed[COL_ELF].unique())
         logger.warning(
-            f"ELF Codes have been removed that appear only once: {removed_elfs}"
+            f"ELF Codes have been removed that appear only once in the training data: {removed_elfs}"
         )
 
     return filtered
@@ -144,10 +144,10 @@ class ModelRepo:
         return ELFDetectionModel(jurisdiction, pipeline)
 
     def list(self):
-        return [
+        return list(sorted([
             model_path.stem.split("_")[-1]
             for model_path in self.models_dir.glob("*.joblib") 
-        ]
+        ]))
 
     @staticmethod
     def from_models_dir(models_dir: Path) -> "ModelRepo":
