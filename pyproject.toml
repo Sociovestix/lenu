@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lenu"
-version = "0.1.1"
+version = "0.2.0"
 description = "Legal Entity Name Understanding"
 readme = "README.md"
 authors = [

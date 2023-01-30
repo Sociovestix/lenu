@@ -144,10 +144,14 @@ class ModelRepo:
         return ELFDetectionModel(jurisdiction, pipeline)
 
     def list(self):
-        return list(sorted([
-            model_path.stem.split("_")[-1]
-            for model_path in self.models_dir.glob("*.joblib") 
-        ]))
+        return list(
+            sorted(
+                [
+                    model_path.stem.split("_")[-1]
+                    for model_path in self.models_dir.glob("*.joblib")
+                ]
+            )
+        )
 
     @staticmethod
     def from_models_dir(models_dir: Path) -> "ModelRepo":
