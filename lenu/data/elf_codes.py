@@ -6,17 +6,6 @@ import pandas  # type: ignore
 ELF_CODE_FILE_NAME = "2021-10-21-elf-code-list-v1.4.1.csv"
 
 
-def load_elf_code_list(url):
-    return pandas.read_csv(
-        url,
-        low_memory=False,
-        dtype=str,
-        # the following will prevent pandas from converting strings like 'NA' to NaN.
-        na_values=[""],
-        keep_default_na=False,
-    )
-
-
 def get_jurisdiction(elf_code_list):
     # We picked region code if we have one, otherwise Country Code
     return elf_code_list.apply(
@@ -86,9 +75,18 @@ class ELFAbbreviations:
                 return True
         return False
 
-    @staticmethod
-    def from_elf_code_list(elf_code_list):
-        elf_code_list = expand_us_states(elf_code_list)
+
+class ELFCodeList:
+    def __init__(self, elf_code_list):
+        self.elf_code_list = elf_code_list
+
+    def get_names(self):
+        return self.elf_code_list.groupby("ELF Code").first()[
+            ["Entity Legal Form name Local name"]
+        ]
+
+    def get_abbreviations(self) -> ELFAbbreviations:
+        elf_code_list = expand_us_states(self.elf_code_list)
 
         elf_abbreviations = elf_code_list.assign(
             Jurisdiction=get_jurisdiction(elf_code_list)
@@ -103,3 +101,20 @@ class ELFAbbreviations:
         )
 
         return ELFAbbreviations(elf_abbreviations)
+
+    def get_inactive_elf_codes(self):
+        return list(self.elf_code_list[
+            self.elf_code_list['ELF Status ACTV/INAC'] == 'INAC'
+        ]['ELF Code'].unique())
+
+
+def load_elf_code_list(url) -> ELFCodeList:
+    elf_code_list = pandas.read_csv(
+        url,
+        low_memory=False,
+        dtype=str,
+        # the following will prevent pandas from converting strings like 'NA' to NaN.
+        na_values=[""],
+        keep_default_na=False,
+    )
+    return ELFCodeList(elf_code_list)

@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 import joblib  # type: ignore
+import numpy
 import pandas  # type: ignore
 from sklearn.compose import ColumnTransformer  # type: ignore
 from sklearn.feature_extraction.text import CountVectorizer  # type: ignore
@@ -10,7 +11,7 @@ from sklearn.model_selection import train_test_split  # type: ignore
 from sklearn.naive_bayes import ComplementNB  # type: ignore
 from sklearn.pipeline import Pipeline  # type: ignore
 
-from lenu.data import DataRepo
+from lenu.data import DataRepo, ELFAbbreviations, ELFCodeList
 from lenu.data.lei import COL_LEGALNAME, COL_ELF
 from lenu.ml.cnames import tokenize
 from lenu.ml.features import ELFAbbreviationTransformer
@@ -18,18 +19,21 @@ from lenu.ml.features import ELFAbbreviationTransformer
 logger = logging.getLogger(__name__)
 
 
-def DefaultPipeline(elf_abbreviations):
+def DefaultPipeline(elf_abbreviations: ELFAbbreviations, jurisdiction: str):
     feature_extractor = ColumnTransformer(
         transformers=[
             (
                 "abbreviations",
-                ELFAbbreviationTransformer(elf_abbreviations=elf_abbreviations),
-                [COL_LEGALNAME, COL_ELF, "Jurisdiction"],
+                ELFAbbreviationTransformer(
+                    elf_abbreviations=elf_abbreviations,
+                    jurisdiction=jurisdiction,
+                ),
+                0,  # column nr
             ),
             (
                 "tokenizer",
                 CountVectorizer(tokenizer=tokenize, lowercase=False, binary=True),
-                COL_LEGALNAME,
+                0,  # column nr
             ),
         ]
     )
@@ -57,11 +61,16 @@ def filter_infrequent_elf_codes(jurisdiction_data):
     return filtered
 
 
-def train_for_jurisdiction(jurisdiction_data, pipeline, test_size=1.0 / 3):
-    filtered = filter_infrequent_elf_codes(jurisdiction_data)
+def filter_inactive_elf_codes(jurisdiction_data, elf_code_list: ELFCodeList):
+    return jurisdiction_data[
+        ~jurisdiction_data[COL_ELF].isin(elf_code_list.get_inactive_elf_codes())
+    ]
 
-    X = filtered[[COL_LEGALNAME, COL_ELF, "Jurisdiction"]]
-    y = filtered[COL_ELF]
+
+def train_for_jurisdiction(jurisdiction_data, pipeline, test_size=1.0 / 3):
+
+    X = jurisdiction_data[[COL_LEGALNAME]].values
+    y = jurisdiction_data[COL_ELF].values
 
     # The minimum number of groups for any class cannot be less than 2.
     X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y)
@@ -85,13 +94,7 @@ class ELFDetectionModel:
 
     def detect(self, legal_name, top=3):
         # preparing the input so that it fits
-        input = pandas.DataFrame(
-            {
-                COL_LEGALNAME: [legal_name],
-                COL_ELF: [""],
-                "Jurisdiction": [self.jurisdiction],
-            }
-        )
+        input = numpy.array([[legal_name]])
 
         # do the prediction
         elf_probabilities = (
@@ -111,9 +114,12 @@ class ModelRepo:
 
     def train_pipeline(self, jurisdiction, data_loader: DataRepo):
         jurisdiction_data = data_loader.load_lei_cdf_data(jurisdiction)
-        elf_abbreviations = data_loader.load_elf_abbreviations()
+        elf_code_list = data_loader.load_elf_code_list()
 
-        pipeline = DefaultPipeline(elf_abbreviations)
+        jurisdiction_data = filter_infrequent_elf_codes(jurisdiction_data)
+        jurisdiction_data = filter_inactive_elf_codes(jurisdiction_data, elf_code_list)
+
+        pipeline = DefaultPipeline(elf_code_list.get_abbreviations(), jurisdiction)
 
         nsamples = len(jurisdiction_data)
         logger.info(
