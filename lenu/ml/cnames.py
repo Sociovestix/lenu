@@ -4,10 +4,25 @@ import unicodedata
 import numpy
 
 
+def _rmdiacritics(char):
+    '''
+    Return the base character of char, by "removing" any
+    diacritics like accents or curls and strokes and the like.
+    '''
+    # https://stackoverflow.com/a/15547803/3264997
+    desc = unicodedata.name(char)
+    cutoff = desc.find(' WITH ')
+    if cutoff != -1:
+        desc = desc[:cutoff]
+        try:
+            char = unicodedata.lookup(desc)
+        except KeyError:
+            pass  # removing "WITH ..." produced an invalid name
+    return char
+
+
 def _replace_diacritics(s):
-    # lambda x : x.replace(u'ø', u'o').replace(u'æ', u'ae'),
-    # what about ü,ö,ä,...
-    return unicodedata.normalize("NFKD", s).encode("ASCII", "ignore").decode("utf-8")
+    return "".join([_rmdiacritics(c) for c in s])
 
 
 def _replace_multi_spaces(s):
