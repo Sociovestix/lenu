@@ -3,7 +3,7 @@ from functools import lru_cache
 import numpy
 import pandas  # type: ignore
 
-ELF_CODE_FILE_NAME = "2021-10-21-elf-code-list-v1.4.1.csv"
+ELF_CODE_FILE_NAME = "2023-09-28-elf-code-list-v1.5.csv"
 
 
 def get_jurisdiction(elf_code_list):
