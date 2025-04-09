@@ -7,7 +7,7 @@ LENU - Legal Entity Name Understanding
 
 <h1 align="center">
 <a href="https://gleif.org">
-<img src="http://sdglabs.ai/wp-content/uploads/2022/07/gleif-logo-new.png" width="220" alt="">
+<img src="[http://sdglabs.ai/wp-content/uploads/2022/07/gleif-logo-new.png](https://www.gleif.org/assets/build/img/logo/gleif-logo-new.svg)" width="220" alt="">
 </a>
 </h1><br>
 <h3 align="center">in collaboration with</h3> 
